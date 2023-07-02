@@ -6,9 +6,9 @@ import Navbar from "./component/Navbar";
 function App() {
   return (
     <>
-      {/* <Navbar />
-      <RouterPage /> */}
-      <Drag></Drag>
+      <Navbar />
+      <RouterPage />
+      {/* <Drag></Drag> */}
     </>
   );
 }
