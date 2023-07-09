@@ -4,6 +4,7 @@ import Home from "../component/Home";
 import Login from "../component/Login";
 
 import Singup from "../component/Singup";
+import Dashboard from "./../component/Dashboard";
 
 const RouterPage = () => {
   return (
@@ -11,6 +12,7 @@ const RouterPage = () => {
       <Route path="/" element={<Home />}></Route>
       <Route path="/signup" element={<Singup />}></Route>
       <Route path="/login" element={<Login />}></Route>
+      <Route path="/dashboard" element={<Dashboard />}></Route>
     </Routes>
   );
 };
