@@ -12,8 +12,8 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
 } from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Swal from "sweetalert2";
@@ -22,6 +22,7 @@ const url = "https://talkies-authentication-server-1.onrender.com";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ export default function Signup() {
     }
 
     // Loader Showing
-    showLoader();
+
     document.getElementById("signupBtn").style.visibility = "hidden";
 
     let signdata = {
@@ -68,7 +69,7 @@ export default function Signup() {
           Swal.fire("Registration Successful", "", "success");
           // Transfer to login page here
           setTimeout(() => {
-            window.location.href = "./login.html";
+            navigate("/login");
           }, 2500);
         } else {
           Swal.fire({
@@ -77,7 +78,6 @@ export default function Signup() {
             text: res.msg,
           });
 
-          hideLoader();
           document.getElementById("signupBtn").style.visibility = "visible";
         }
       })
@@ -88,7 +88,7 @@ export default function Signup() {
           title: "Oops...",
           text: err.message,
         });
-        hideLoader();
+
         document.getElementById("signupBtn").style.visibility = "visible";
       });
   };
@@ -167,7 +167,10 @@ export default function Signup() {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Already a user? <Link color={"blue.400"}>Login</Link>
+                Already a user?{" "}
+                <Link to="/login" color={"blue.400"}>
+                  Login
+                </Link>
               </Text>
             </Stack>
           </Stack>
