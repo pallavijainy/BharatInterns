@@ -1,31 +1,28 @@
 import React, { useEffect } from "react";
-import { Box, Flex, Heading, Image, Link, Stack, Text } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
+import { Box, Image } from "@chakra-ui/react";
+
 import Swal from "sweetalert2";
-import Loader from "./Loader";
+
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 
 // Import any additional CSS files here
 
 const Dashboard = () => {
-  const history = useHistory();
-
+  const navigate = useNavigate();
   useEffect(() => {
     userLoggedIn();
   }, []);
 
   const userLoggedIn = async () => {
     const token = localStorage.getItem("token");
-    const request = await fetch(
-      "https://talkies-authentication-server-1.onrender.com/user/check",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ token: token }),
-      }
-    );
+    const request = await fetch("http://localhost:8080/user/check", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ token: token }),
+    });
 
     const response = await request.json();
     if (!response.ok) {
@@ -35,7 +32,7 @@ const Dashboard = () => {
         text: "Please Login First",
       });
       setTimeout(() => {
-        history.push("/login");
+        navigate("/login");
       }, 3000);
     }
   };
@@ -43,26 +40,22 @@ const Dashboard = () => {
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
 
-    const request = await fetch(
-      "https://talkies-authentication-server-1.onrender.com/user/logout",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      }
-    );
+    const request = await fetch("http://localhost:8080/user/logout", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
 
     localStorage.clear();
     localStorage.setItem("signedIn", false);
-    history.push("/login");
+    navigate("/login");
   };
 
   return (
     <>
       <Box id="main_dashboard">
-        <Loader />
         <Box id="ïmg1">
           <Image
             className="img1_main"

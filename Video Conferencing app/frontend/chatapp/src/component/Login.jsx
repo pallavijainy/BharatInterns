@@ -11,14 +11,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import Swal from "sweetalert2";
-import { useState } from "react";
-function showLoader() {
-  // Code to show the loader or spinner element
-}
-
-function hideLoader() {
-  // Code to hide the loader or spinner element
-}
 
 export default function Login() {
   const handleLogin = (e) => {
@@ -36,8 +28,6 @@ export default function Login() {
       return;
     }
 
-    // Loader Showing
-    showLoader();
     document.getElementById("login").style.visibility = "hidden";
 
     let signdata = {
@@ -45,7 +35,7 @@ export default function Login() {
       password: lpass,
     };
 
-    fetch(`https://talkies-authentication-server-1.onrender.com/user/login`, {
+    fetch(`http://localhost:8080/user/login`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -70,7 +60,6 @@ export default function Login() {
             text: res.msg,
           });
 
-          hideLoader();
           document.getElementById("login").style.visibility = "visible";
         }
       })
@@ -81,7 +70,7 @@ export default function Login() {
           title: "Oops...",
           text: err.message,
         });
-        hideLoader();
+
         document.getElementById("login").style.visibility = "visible";
       });
   };

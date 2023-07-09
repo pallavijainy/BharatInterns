@@ -18,7 +18,7 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Swal from "sweetalert2";
 
-const url = "https://talkies-authentication-server-1.onrender.com";
+const url = "http://localhost:8080";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
