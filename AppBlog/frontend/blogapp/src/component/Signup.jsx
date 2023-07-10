@@ -1,5 +1,6 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import image from "../images/Popular-social-media-Blogger-logo-on-transparent-PNG.png";
+import { Link, Navigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -14,7 +15,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
+  Image,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -24,6 +25,7 @@ import axios from "axios";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConformPassword, setShowConformPassword] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const {
     register,
     handleSubmit,
@@ -36,22 +38,23 @@ const Signup = () => {
       .post("http://localhost:8000/register", data)
       .then((res) => {
         alert(res.data.msg);
+        setRedirect(true);
       })
       .catch((errors) => {
         console.log(errors);
       });
   };
 
+  if (redirect) {
+    return <Navigate to={"/login"} />;
+  }
+
   return (
     <div>
-      <Flex
-        minH={"100vh"}
-        align={"center"}
-        justify={"center"}
-        bg={useColorModeValue("gray.50", "gray.800")}
-      >
+      <Flex minH={"100vh"} align={"center"} justify={"center"}>
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
+            <Image src={image} width={"100px"} />
             <Heading fontSize={"4xl"} textAlign={"center"}>
               Sign up
             </Heading>
@@ -59,12 +62,7 @@ const Signup = () => {
               to enjoy all of our cool features ✌️
             </Text>
           </Stack>
-          <Box
-            rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
-            boxShadow={"lg"}
-            p={8}
-          >
+          <Box rounded={"lg"} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
               <HStack>
                 <Box>
@@ -198,7 +196,10 @@ const Signup = () => {
               </Stack>
               <Stack pt={6}>
                 <Text align={"center"}>
-                  Already a user? <Link color={"blue.400"}>Login</Link>
+                  Already a user?{" "}
+                  <Link to="/login" style={{ color: "blue" }}>
+                    Login
+                  </Link>
                 </Text>
               </Stack>
             </Stack>
