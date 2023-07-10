@@ -49,7 +49,11 @@ app.post("/login", async (req, res) => {
         if (result) {
           const token = jwt.sign({ email, id: data._id }, secret);
           res.cookie("token", token).status(200);
-          res.send({ msg: "User logged in successfully", email: email });
+          res.send({
+            msg: "User logged in successfully",
+            email: email,
+            id: data._id,
+          });
         } else {
           res.send({ msg: "Wrong Password" });
         }
@@ -114,6 +118,36 @@ app.get("/postbyid/:id", async (req, res) => {
     .populate("author", ["firstname", "lastname"])
     .sort({ createdAt: -1 });
   res.send(PostById);
+});
+
+app.put("/updatepost", uploadMiddleware.single("file"), async (req, res) => {
+  let newPath = null;
+  if (req.file) {
+    const { originalname, path } = req.file;
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+  }
+  const { token } = req.cookies;
+
+  jwt.verify(token, secret, async (err, info) => {
+    if (err) throw err;
+    const { id, title, summery, content } = req.body;
+
+    const postDoc = await PostModel.findById(id);
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+    if (!isAuthor) {
+      return res.status(400).send("You are not a author of this post");
+    }
+    await postDoc.updateOne({
+      title,
+      summery,
+      content,
+      cover: newPath ? newPath : postDoc.cover,
+    });
+    res.send("ok");
+  });
 });
 
 app.listen(8000, async () => {
